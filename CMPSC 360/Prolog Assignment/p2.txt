@@ -1,0 +1,19 @@
+John and Lisa are friends.
+John and Bob are friends.
+Bob and Alice are friends.
+Alice and Emma are friends.
+Emma and Tom are friends.
+Tom and Lisa are friends.
+
+John has a hobby of reading.
+John has a hobby of hiking.
+Bob has a hobby of painting.
+Bob has a hobby of hiking.
+Alice has a hobby of reading.
+Alice has a hobby of painting.
+Emma has a hobby of painting.
+Emma has a hobby of hiking.
+Tom has a hobby of reading.
+Tom has a hobby of hiking.
+Lisa has a hobby of painting.
+Lisa has a hobby of reading.
