@@ -1,0 +1,44 @@
+---
+title: "HW 1"
+output: html_document
+---
+
+Question 4.3
+```{r}
+Computed1 <- pnorm(1/2) - pnorm(-3/2)
+Computed2 <- pnorm(1/sqrt(2)) - pnorm(-3/sqrt(2))
+
+print(c(Computed1, Computed2))
+```
+
+Question 4.4
+```{r}
+set.seed(42)
+X1 <- rnorm(n = 10000, mean = 10, sd = 2)
+summary(X1)
+```
+
+Question 4.4a
+```{r}
+Simulated1 <- sum(7 < X1 & X1 < 11) / 10000
+print(Simulated1)
+```
+
+Question 4.4b
+```{r}
+X2 <- rnorm(n = 10000, mean = 10, sd = 2)
+Simulated2 <- sum(7 < (X1 + X2)/2 & (X1 + X2)/2 < 11) / 10000
+print(Simulated2)
+```
+
+Question 4.4c
+```{r}
+results <- data.frame(
+  Question = c("Question 1", "Question 2"),
+  Computed_Answer = c(Computed1, Computed2),
+  Simulated_Answer = c(Simulated1, Simulated2)
+)
+
+print(results)
+```
+

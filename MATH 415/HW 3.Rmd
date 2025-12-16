@@ -1,0 +1,36 @@
+---
+title: "HW 3"
+output: html_document
+---
+
+```{r}
+load("accidents-1.Rdata")
+head(nAccidents)
+```
+
+```{r}
+my_pois_logLik <- function(lambda, dat) {
+  if (lambda <= 0) {
+    # If lambda <= 0, set log-likelihood to -Inf
+    log_lik_value <- -Inf
+  } else {
+    # If lambda > 0, compute the log-likelihood
+    n <- length(dat)  # Length of the data (x1, ..., xn)
+    log_lik_value <- -n * lambda + sum(dat) * log(lambda) - sum(log(factorial(dat)))
+  }
+  
+  return(-log_lik_value)
+}
+
+mean(nAccidents)
+```
+
+```{r}
+optim_result <- optim(par = 1, fn = my_pois_logLik, method = "L-BFGS-B", dat = nAccidents, lower = 0.001)
+optim_result
+```
+
+We see from the output above that
+1. the maximizer is 2.7 which is the correct value for the mean
+2. the function value at 2.7 is 391
+3. and the convergence value is 0, so convergence was successful

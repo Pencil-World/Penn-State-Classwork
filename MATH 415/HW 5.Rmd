@@ -1,0 +1,99 @@
+---
+title: "HW 5"
+output: html_document
+---
+
+```{r}
+load("hw4-1.Rdata")
+```
+
+```{r}
+n <- length(myDat)
+theta_mle <- prod(myDat)^(1/n)  # MLE for theta
+beta_mle <- log(theta_mle)       # MLE for beta
+
+B <- 10000
+beta_mle_star <- numeric(B)  # Store bootstrap estimates
+```
+
+```{r}
+for (b in 1:B) {
+  boot_dat <- sample(myDat, size = n, replace = TRUE)  # Resample with replacement
+  theta_mle_star <- prod(boot_dat)^(1/n)  # MLE for theta from bootstrap sample
+  beta_mle_star[b] <- log(theta_mle_star)  # MLE for beta from bootstrap sample
+}
+```
+
+```{r}
+c1 <- quantile(beta_mle_star, 0.05)  # 5th percentile
+c2 <- quantile(beta_mle_star, 0.95)  # 95th percentile
+
+basic_CI <- c(2*beta_mle - c2, 2*beta_mle - c1)
+beta_mle_star_param <- numeric(B)
+```
+
+```{r}
+for (b in 1:B) {
+  boot_dat <- rbeta(n, theta_mle, 1)  # Generate parametric bootstrap sample
+  theta_mle_star <- prod(boot_dat)^(1/n)  # MLE for theta from parametric bootstrap sample
+  beta_mle_star_param[b] <- log(theta_mle_star)  # MLE for beta from bootstrap sample
+}
+```
+
+```{r}
+c1_param <- quantile(beta_mle_star_param, 0.05)
+c2_param <- quantile(beta_mle_star_param, 0.95)
+percentile_CI <- c(c1_param, c2_param)
+
+cat("Basic Bootstrap CI (Non-Parametric):", basic_CI, "\n")
+cat("Percentile Bootstrap CI (Parametric):", percentile_CI, "\n")
+```
+## Question 2
+
+part a
+```{r}
+set.seed(1234)
+x <- rexp(n = 100, rate = 1/15)
+beta_hat <- mean(x)
+eta_hat <- exp(-10 / beta_hat)
+
+cat("MLE of beta:", beta_hat, "\n")
+cat("MLE of eta:", eta_hat, "\n")
+```
+
+part b\
+Asymptotic distribution of MLE Beta-hat is N(Beta-hat, Beta-hat squared divided by n)
+
+part c
+```{r}
+var_beta_hat <- (beta_hat^2) / length(x)  # Variance of beta_hat
+var_eta_hat <- (100 * eta_hat^2) / (length(x) * beta_hat^2)  # Delta method variance
+sd_eta_hat <- sqrt(var_eta_hat)
+
+cat("Standard deviation of eta_hat:", sd_eta_hat, "\n")
+```
+
+part d
+```{r}
+z_score <- qnorm(0.975)
+ci_asymp <- c(eta_hat - z_score * sd_eta_hat, eta_hat + z_score * sd_eta_hat)
+
+cat("95% Asymptotic CI for eta:", ci_asymp, "\n")
+```
+
+part e
+```{r}
+B <- 10000
+eta_boot <- numeric(B)
+
+for (b in 1:B) {
+  boot_sample <- rexp(n = length(x), rate = 1/beta_hat)
+  beta_boot <- mean(boot_sample)
+  eta_boot[b] <- exp(-10 / beta_boot)
+}
+
+ci_bootstrap <- quantile(eta_boot, c(0.025, 0.975))
+
+cat("95% Bootstrap CI for eta:", ci_bootstrap, "\n")
+```
+

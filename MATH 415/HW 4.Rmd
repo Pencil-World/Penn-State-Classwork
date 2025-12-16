@@ -1,0 +1,28 @@
+---
+title: "HW 4"
+output: html_document
+---
+
+```{r}
+load("hw4-1.Rdata")
+n <- length(myDat)
+theta_hat <- -n / sum(log(myDat))
+SE <- theta_hat / sqrt(n)
+CI <- theta_hat + c(-1,1)*1.645*SE
+cat("Standard Error:", SE, "\n")
+cat("90% Confidence Interval: (", CI[1], ",", CI[2], ")\n")
+```
+
+```{r}
+mylogLik <- function(theta, dat){
+  if(theta < 0) return(-Inf)
+  sum(dbeta(dat, shape1 = theta, shape2 = 1, log = TRUE))
+}
+fit <- optim(par=1, fn=mylogLik, dat=myDat, method="BFGS", control=list(fnscale=-1), hessian=TRUE)
+theta_hat <- fit$par
+SE <- sqrt(1 / (-fit$hessian))
+SE <- as.vector(SE)
+CI <- theta_hat + c(-1,1)*1.645*SE
+cat("Standard Error:", SE, "\n")
+cat("90% Confidence Interval: (", CI[1], ",", CI[2], ")\n")
+```
